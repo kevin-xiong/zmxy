@@ -1,5 +1,12 @@
 # 芝麻信用 NodeJS SDK (非官方)
 
+[![NPM version](https://img.shields.io/npm/v/zmxy.svg?style=flat-square)](http://badge.fury.io/js/zmxy)
+[![Build Status](https://travis-ci.org/bmqb/zmxy.svg?branch=master)](https://travis-ci.org/bmqb/zmxy)
+[![Dependencies Status](https://david-dm.org/bmqb/zmxy.svg)](https://david-dm.org/bmqb/zmxy)
+[![codecov](https://codecov.io/gh/bmqb/zmxy/branch/master/graph/badge.svg)](https://codecov.io/gh/bmqb/zmxy)
+[![npm](https://img.shields.io/npm/dm/bmqb.svg?maxAge=2592000)](https://www.npmjs.com/package/zmxy)
+[![License](https://img.shields.io/npm/l/zmxy.svg?maxAge=2592000?style=plastic)](https://github.com/bmqb/zmxy/blob/master/LICENSE)
+
 ## 接入流程
 
 ### 注册并签约
