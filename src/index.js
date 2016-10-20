@@ -53,24 +53,6 @@ export default class ZmxyClient {
   }
 
   /**
-   * @param {String} key
-   * @returns {ZmxyClient}
-   */
-  setAppPrivateKey(key) {
-    this.appPrivateKey = key;
-    return this;
-  }
-
-  /**
-   * @param {String} key
-   * @returns {ZmxyClient}
-   */
-  setZmxyPublicKey(key) {
-    this.zmxyPublicKey = key;
-    return this;
-  }
-
-  /**
    * @param {Object} options
    * @returns {ZmxyClient}
    */

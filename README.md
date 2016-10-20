@@ -9,9 +9,9 @@
 
 ## 接入流程
 
-### 注册并签约
+### 1. 注册并签约
 
-### 在芝麻信用创建App并交换公钥
+### 2. 在芝麻信用创建App并交换公钥
 
 与芝麻信用交换公钥的步骤：
 
@@ -28,9 +28,9 @@
 - zmxy_public_key.pem 芝麻信用公钥
 - app_public_key.pem App公钥(仅用于调试)
 
-### 使用SDK
+### 3. 使用SDK
 
-安装SDK
+在任意Node项目中可以通过npm安装
 
 ```
 npm install zmxy --save
@@ -59,7 +59,7 @@ zmxy.verifyIvs({
 
 请求成功后可以看到控制台打印芝麻信用的返回
 
-```
+``` js
 { success: true,
   biz_no: 'ZM2016102030000000XXXXXXXXX',
   ivs_detail:
@@ -70,10 +70,93 @@ zmxy.verifyIvs({
   ivs_score: 72 }
 ```
 
+## SDK功能
+
+### 反欺诈信息验证
+
+``` js
+zmxy.verifyIvs({
+  name: '张三',
+  mobile: '12345678901'
+}).then(({ result }) => {
+  console.log(result);
+});
+```
+
+### 查询芝麻评分
+
+由于芝麻评分需要用户授权，因此首先需要生成授权URL
+
+#### 生成授权URL
+
+授权URL可以通过姓名+身份证或者手机号得到， 同时又支持PC网页和H5页面，排列组合共4种情况如下
+
+手机号+PC
+
+``` js
+const { url } = zmxyClient.getAuthorizeUrl({
+  mobile: '12345678901'
+});
+```
+
+手机号+H5
+
+``` js
+const { url } = zmxyClient.getAuthorizeUrl({
+  mobile: '12345678901'
+}, 'h5');
+```
+
+身份证+PC
+
+``` js
+const { url } = zmxyClient.getAuthorizeUrl({
+  name: '张三',
+  certNo: '111111111111111111'
+});
+```
+
+身份证+H5
+
+``` js
+const { url } = zmxyClient.getAuthorizeUrl({
+  name: '张三',
+  certNo: '111111111111111111'
+}, 'h5');
+```
+
+#### 获得OpenId
+
+获得授权URL后， 可以在浏览器中打开此URL，根据提示授权后会被重定向到芝麻App的回调地址， 地址Query中的`params`参数会携带OpenId， 可以通过如下方式获得
+
+``` js
+const { open_id } = zmxyClient.getOpenId(params);
+```
+
+#### 查询芝麻信用分
+ 
+有了OpenID后就可以查询芝麻信用分
+
+``` js
+zmxyClient.getCreditScore('openid').then((r) => {
+  console.log(r.result.zm_score)
+});
+```
+
+### 查询行业关注名单
+
+同上获得OpenId后可做如下查询
+
+``` js
+zmxyClient.verifyWatchlist('openid').then((r) => {
+  console.log(r.result.is_matched)
+});
+```
+
 ## 开启调试
 
 
-由于SDK使用了[request]()， 所以可以直接在命令行中通过环境变量开启Debug模式
+由于SDK使用了[request](https://github.com/request/request)， 所以可以直接在命令行中通过环境变量开启Debug模式
 
 ```
 NODE_DEBUG=request node app.js

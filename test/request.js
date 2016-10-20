@@ -68,6 +68,13 @@ test('Get auth url by name during h5', async(t) => {
   t.is(auth_code, 'M_H5');
 });
 
+test('Get open id', async(t) => {
+  const { open_id } = zmxyClient.getOpenId(
+    'WRK8lfrvYpCLG/f36NZjtkpj7epnIEJWKkKXFR/gl17a0lnvqraAVT0NaT0A0t8BQZLYtRTamzX4K4VFXTsq2qXx7Wppo2wDQObQjsKv7BAPbIjj4+fuP0W6L7qKnmx3nZtBPBPqcFAwrVEyWgCtNDtkrcirKPI19h6rJCnzhzHUIWCBqvk1kuJcOViwHyWOz6s78PiX6odZ5rPPBLIXahyixU95SnvMlUCyLXICclE80nuzkFscs1maHFcG5Rkj35cKkW0m0rbLVsPQKksfvjbvQRMGiqylinaqWcdbeCKPB+TjofN+kglwdtlI9mFNybNN4/Su3BwryKQOOSBTXw=='
+  );
+  t.truthy(open_id);
+});
+
 
 test('Verify IVS', async(t) => {
   nock('https://zmopenapi.zmxy.com.cn')
@@ -88,13 +95,57 @@ test('Verify IVS', async(t) => {
   });
 
   const publicKey = fs.readFileSync(`${__dirname}/_keys/app_public_key.pem`);
+  const query = querystring.parse(request.uri.query);
   t.is(request.method, 'POST');
   t.is(params.product_code, 'w1010100000000000103');
   t.is(params.name, '张三');
   t.is(params.mobile, '12345678901');
   t.truthy(params.transaction_id);
-  t.is(querystring.parse(request.uri.query).method, 'zhima.credit.ivs.detail.get');
-  t.true(zmxyClient.verify(zmxyClient.paramsToString(params), querystring.parse(request.uri.query).sign, publicKey));
+  t.is(query.method, 'zhima.credit.ivs.detail.get');
+  t.is(query.app_id, '123456');
+  t.is(query.charset, 'UTF-8');
+  t.is(query.platform, 'zmop');
+  t.is(query.version, '1.0');
+  t.true(zmxyClient.verify(zmxyClient.paramsToString(params), query.sign, publicKey));
   t.is(result.ivs_score, 89);
 });
 
+test('Verify watchlist', async(t) => {
+  nock('https://zmopenapi.zmxy.com.cn')
+    .post('/openapi.do')
+    .query(() => true)
+    .reply(200, {
+      encrypted: true,
+      sign: {
+        signSource: 'zhima_sign_value',
+        signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
+      },
+      biz_response_sign: 'MNbiY+5IMZuQgGadVsv/pfnz3d4RRBm5ETQBN3cv2nSAwmzFHM08zNlFYxz21lx016A1p7DtCeE2PV+WSK8fXrOc4LXRs5nhdNpq9TVbIMvPGmw1o9FUaXJjQjeHU2WS30pxdZXynbuuKEfvqp+9GqI2GCqjrnuKF0e7NEs9+5c=',
+      biz_response: 'VvfJ2o4dSJP9xceYGnT44ovHPfJXnPv9un6Stn56nSZshGp9GlXR+GisLwgPgFiXEJaw1TmL4ti77v9FW+wQejS6gFZadSTrIj94b2jcdo3AJ0ZV2hdr/O0MzHI77+N3SqlF3w7upwWzGYEoHWx2bmLKuhoOVjQ4uLVxCQp8m8w='
+    });
+  const { params, request, result: { is_matched } } = await zmxyClient.verifyWatchlist('some open id');
+  const query = querystring.parse(request.uri.query);
+  t.false(is_matched);
+  t.is(params.product_code, 'w1010100100000000022');
+  t.is(query.method, 'zhima.credit.watchlist.get');
+});
+
+test('Get score', async(t) => {
+  nock('https://zmopenapi.zmxy.com.cn')
+    .post('/openapi.do')
+    .query(() => true)
+    .reply(200, {
+      encrypted: true,
+      sign: {
+        signSource: 'zhima_sign_value',
+        signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
+      },
+      biz_response_sign: 'NtjFCeugTs93kx1XsRWW93vQzofkhXwIPDVRNe3hHbG3bQVltttBWWGrAS8gkxn/ncsw5TRSWn5DZFb4xV6P4m1nDX1JKU2ac2M2Xt01ZkATcMkZ2oktTobhS292sP7l2O5QvK+amzUZY6IA2ZshKI2N1B1Y1astxBodWXklUV0=',
+      biz_response: 'YswXpDhZwOiLMjh4OrMgvyiM0eScLLVtjVf3EwRUEjdXW3fscGIYe6KI4ErwcLMAcSYumrUfwSYUTXSjXXW1EYODkt/Wcu9i1rXq7LbliArtvNTphWtF7kef597J1YxwG2J9JXWCrdOMvmc6+hRd+ebMqC27OySsusVz4w/C3rc='
+    });
+  const { params, request, result: { zm_score } } = await zmxyClient.getCreditScore('some open id');
+  const query = querystring.parse(request.uri.query);
+  t.truthy(zm_score);
+  t.is(params.product_code, 'w1010100100000000001');
+  t.is(query.method, 'zhima.credit.score.get');
+});
