@@ -14,50 +14,71 @@ const random = (len = 16) => {
   return str;
 };
 
+/**
+ * Zhima Credit Client
+ */
 export default class ZmxyClient {
-  version = '1.0';
-  url = 'https://zmopenapi.zmxy.com.cn/openapi.do';
+  version = '1.0'; //不能更改
+  url = 'https://zmopenapi.zmxy.com.cn/openapi.do';  //没有测试环境，无法更改
   charset = 'UTF-8';
-  platform = null;
-  appId = null;
-  appPrivateKey = null;
-  zmxyPublicKey = null;
-  randomFunc = null;
+  platform = 'zmop'; //不能更改，更改后会报 ZMOP.invalid_platform_param
+  appId = null; //芝麻App ID
+  appPrivateKey = null; //App私钥
+  zmxyPublicKey = null; //芝麻公钥
+  randomFunc = null; //随机字符串算法
+  options = {};
 
+  /**
+   * @param client
+   * @param appId
+   * @param appPrivateKey
+   * @param zmxyPublicKey
+   * @param randomFunc
+   */
   constructor({
     client,
-    platform,
     appId,
     appPrivateKey,
     zmxyPublicKey,
     randomFunc
   }) {
     this.client = client || request;
-    this.platform = platform;
     this.appId = appId;
     this.appPrivateKey = appPrivateKey;
     this.zmxyPublicKey = zmxyPublicKey;
     this.randomFunc = randomFunc || random;
-    this.options = {};
+    this.setOptions({});
   }
 
+  /**
+   * @param {String} key
+   * @returns {ZmxyClient}
+   */
   setAppPrivateKey(key) {
     this.appPrivateKey = key;
     return this;
   }
 
+  /**
+   * @param {String} key
+   * @returns {ZmxyClient}
+   */
   setZmxyPublicKey(key) {
     this.zmxyPublicKey = key;
     return this;
   }
 
+  /**
+   * @param {Object} options
+   * @returns {ZmxyClient}
+   */
   setOptions(options) {
     this.options = Object.assign({
       version: this.version,
-      platform: this.p,
+      platform: this.platform,
       channel: 'apppc',
       charset: this.charset,
-      app_id: ''
+      app_id: this.appId
     }, options);
     return this;
   }
@@ -65,7 +86,8 @@ export default class ZmxyClient {
   /**
    * 反欺诈信息验证
    * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.ivs.detail.get@1.0@1.2&relType=API_DOC&type=API_INFO_DOC&LEFT_MENU_MODEnull
-   * @returns {boolean}
+   * @param params
+   * @returns {{params, request, response, result}|*}
    */
   async verifyIvs(params) {
     return await this.request('zhima.credit.ivs.detail.get',
@@ -79,7 +101,9 @@ export default class ZmxyClient {
   /**
    * 行业黑名单验证
    * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.watchlistii.get@1.0@1.0&relType=API_DOC&type=API_INFO_DOC&LEFT_MENU_MODE=null
-   * @returns {boolean}
+   * @param openId
+   * @param transactionId
+   * @returns {{params, request, response, result}|*}
    */
   async verifyWatchlist(openId, transactionId) {
     return await this.request('zhima.credit.watchlist.get', {
@@ -92,7 +116,9 @@ export default class ZmxyClient {
   /**
    * 获得芝麻信用评分
    * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.score.get@1.0@1.4&relType=API_DOC&type=API_INFO_DOC&LEFT_MENU_MODEnull
-   * @returns {boolean}
+   * @param openId
+   * @param transactionId
+   * @returns {{params, request, response, result}|*}
    */
   async getCreditScore(openId, transactionId) {
     return await this.request('zhima.credit.score.get', {
@@ -167,11 +193,23 @@ export default class ZmxyClient {
     };
   }
 
+  /**
+   * 根据Callback参数获得OpenId对象
+   * @param {String} callbackString
+   * @returns {Object}
+   */
   getOpenId(callbackString) {
     return this.stringToParams(this.decrypt(callbackString));
   }
 
-  encrypt(text, blockSize = 128, publicKey) {
+  /**
+   * 公钥加密
+   * @param {String} text
+   * @param {Number} blockSize
+   * @param {String} publicKey
+   * @returns {String}
+   */
+  encrypt(text, blockSize = 128, publicKey = this.zmxyPublicKey) {
     const padding = 11;
     const chunkSize = blockSize - padding;
     const inputBuffer = new Buffer(text);
@@ -180,7 +218,7 @@ export default class ZmxyClient {
     for (let i = 0; i < chunksCount; i += 1) {
       const currentBlock = inputBuffer.slice(chunkSize * i, chunkSize * (i + 1));
       const encryptedChunk = crypto.publicEncrypt({
-        key: publicKey || this.zmxyPublicKey,
+        key: publicKey,
         padding: crypto.constants.RSA_PKCS1_PADDING
       }, currentBlock);
       encryptedChunk.copy(outputBuffer, i * blockSize);
@@ -188,7 +226,13 @@ export default class ZmxyClient {
     return outputBuffer.toString('base64');
   }
 
-  decrypt(encrypted, privateKey) {
+  /**
+   * 私钥解密
+   * @param {String} encrypted
+   * @param {String} privateKey
+   * @returns {String}
+   */
+  decrypt(encrypted, privateKey = this.appPrivateKey) {
     const chunkSize = 128;
     const decodedBuffer = new Buffer(encrypted, 'base64');
     const chunksCount = Math.ceil(decodedBuffer.length / (chunkSize));
@@ -198,7 +242,7 @@ export default class ZmxyClient {
       const currentBlock = decodedBuffer.slice(
         chunkSize * i, Math.min(chunkSize * (i + 1), decodedBuffer.length));
       const decryptedBuf = crypto.privateDecrypt({
-        key: privateKey || this.appPrivateKey,
+        key: privateKey,
         padding: crypto.constants.RSA_PKCS1_PADDING
       }, currentBlock);
 
@@ -208,26 +252,54 @@ export default class ZmxyClient {
     return outputBuffer.slice(0, totalLength).toString();
   }
 
+  /**
+   * 字符串转换为业务参数
+   * @param paramsString
+   */
   stringToParams(paramsString) {
     return querystring.parse(paramsString);
   }
 
+  /**
+   * 业务参数转换为字符串
+   * @param {Object} params
+   * @returns {string}
+   */
   paramsToString(params) {
     const sortedParams = Object.keys(params).sort().reduce((r, k) => (r[k] = params[k], r), {});
     return Object.entries(sortedParams)
-      .filter(([, value]) => value !== null)
+      .filter(([, value]) => ![null, ''].includes(value))
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&');
   }
 
-  sign(input, key) {
-    return crypto.createSign('RSA-SHA1').update(input, 'utf8').sign(key || this.appPrivateKey, 'base64');
+  /**
+   * 对字符串生成签名
+   * @param {String} input
+   * @param {String} key
+   * @returns {String}
+   */
+  sign(input, key = this.appPrivateKey) {
+    return crypto.createSign('RSA-SHA1').update(input, 'utf8').sign(key, 'base64');
   }
 
-  verify(expected, sign, key) {
-    return crypto.createVerify('RSA-SHA1').update(expected, 'utf8').verify(key || this.zmxyPublicKey, sign, 'base64');
+  /**
+   * 验证签名
+   * @param {String} expected
+   * @param {String} sign
+   * @param {String} key
+   * @returns {Boolean}
+   */
+  verify(expected, sign, key = this.zmxyPublicKey) {
+    return crypto.createVerify('RSA-SHA1').update(expected, 'utf8').verify(key, sign, 'base64');
   }
 
+  /**
+   * 发起一个API请求
+   * @param {String} service
+   * @param {Object} params
+   * @returns {{params: *, request, response: *, result: *}}
+   */
   async request(service, params) {
     const paramsString = this.paramsToString(params);
     const sign = this.sign(paramsString);
@@ -246,11 +318,15 @@ export default class ZmxyClient {
       request,
       body
     } = response;
+    const {
+      encrypted,
+      biz_response:result
+    } = body;
     return {
       params,
       request,
       response,
-      result: JSON.parse(this.decrypt(body.biz_response))
+      result: encrypted ? JSON.parse(this.decrypt(result)) : result
     };
   }
 }
