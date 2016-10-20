@@ -48,7 +48,7 @@ test('Get auth url by name during pc', async(t) => {
   const { identity_type, identity_param: { name, certNo, certType }, biz_params: { auth_code } } = zmxyClient.getAuthorizeUrl({
     name: '张三',
     certNo: '111111111111111111'
-  });
+  }, 'strange');
   t.is(identity_type, '2');
   t.is(name, '张三');
   t.is(certNo, '111111111111111111');

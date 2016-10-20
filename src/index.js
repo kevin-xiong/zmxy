@@ -144,7 +144,7 @@ export default class ZmxyClient {
       h5_2: 'M_H5'
     };
     let authBy = _authBy.toLowerCase();
-    if (!['pc', 'h5', 'sdk'].includes(authBy)) {
+    if (!['pc', 'h5'].includes(authBy)) {
       authBy = 'pc';
     }
     const authCode = authCodes[`${authBy}_${identityType}`];
