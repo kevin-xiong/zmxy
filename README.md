@@ -40,7 +40,7 @@ npm install zmxy --save
 
 ``` js
 const fs = require('fs');
-const ZmxyClient = require('../src').default;
+const ZmxyClient = require('zmxy').default;
 
 const zmxy = new ZmxyClient({
   appId: '123456',   //芝麻应用App ID
