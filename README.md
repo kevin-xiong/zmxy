@@ -39,26 +39,42 @@ npm install zmxy --save
 在保存秘钥的文件夹下创建`app.js`文件
 
 ``` js
-const zmxyClient = new ZmxyClient({
-    platform: 'bmqb',  //接入商户名
-    appId: '123456',   //芝麻应用App ID
-    appPrivateKey: fs.readFileSync(`${__dirname}/app_private_key.pem`),  //App私钥
-    zmxyPublicKey: fs.readFileSync(`${__dirname}/zmxy_public_key.pem`)   //芝麻公钥
+const fs = require('fs');
+const ZmxyClient = require('../src').default;
+
+const zmxy = new ZmxyClient({
+  appId: '123456',   //芝麻应用App ID
+  appPrivateKey: fs.readFileSync(`${__dirname}/app_private_key.pem`),  //App私钥
+  zmxyPublicKey: fs.readFileSync(`${__dirname}/zmxy_public_key.pem`)   //芝麻公钥
 });
-zmxyClient.verifyIvs({
-    name: '张三',
-    mobile: '12345678901'
-}).then((result) => {
-    console.log(result)
+zmxy.verifyIvs({
+  name: '张三',
+  mobile: '12345678901'
+}).then(({ result }) => {
+  console.log(result);
+}).catch((err) => {
+  console.error(err);
 });
 ```
 
 请求成功后可以看到控制台打印芝麻信用的返回
 
 ```
-
+{ success: true,
+  biz_no: 'ZM2016102030000000XXXXXXXXX',
+  ivs_detail:
+   [ { code: 'PHONE_Match_Recency_Bad',
+       description: '电话号码与其他信息匹配，但匹配后的信息近期不活跃' },
+     { code: 'NAME_Match_Reliability_Bad',
+       description: '姓名与其他信息匹配，但匹配后的信息未经认证' } ],
+  ivs_score: 72 }
 ```
 
 ## 开启调试
 
-NODE_DEBUG=request
+
+由于SDK使用了[request]()， 所以可以直接在命令行中通过环境变量开启Debug模式
+
+```
+NODE_DEBUG=request node app.js
+```

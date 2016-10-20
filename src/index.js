@@ -2,6 +2,8 @@ import querystring from 'querystring';
 import request from 'request-promise';
 import crypto from 'crypto';
 
+const constants = parseInt(process.versions.node, 10) <= 4 ? require('constants') : crypto.constants;
+
 const random = (len = 16) => {
   const digits = '0123456789abcdefghijklmnopqrstuvwxyz';
   let str = '';
@@ -219,7 +221,7 @@ export default class ZmxyClient {
       const currentBlock = inputBuffer.slice(chunkSize * i, chunkSize * (i + 1));
       const encryptedChunk = crypto.publicEncrypt({
         key: publicKey,
-        padding: crypto.constants.RSA_PKCS1_PADDING
+        padding: constants.RSA_PKCS1_PADDING
       }, currentBlock);
       encryptedChunk.copy(outputBuffer, i * blockSize);
     }
@@ -243,7 +245,7 @@ export default class ZmxyClient {
         chunkSize * i, Math.min(chunkSize * (i + 1), decodedBuffer.length));
       const decryptedBuf = crypto.privateDecrypt({
         key: privateKey,
-        padding: crypto.constants.RSA_PKCS1_PADDING
+        padding: constants.RSA_PKCS1_PADDING
       }, currentBlock);
 
       decryptedBuf.copy(outputBuffer, totalLength);
