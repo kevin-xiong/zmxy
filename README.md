@@ -9,9 +9,9 @@
 
 ## 接入流程
 
-### 1. 注册并签约
+### 1. 注册[芝麻信用商家服务平台](https://b.zmxy.com.cn/index.htm)并签约
 
-### 2. 在芝麻信用创建App并交换公钥
+### 2. 在芝麻信用商家服务平台创建商家应用并交换公钥
 
 与芝麻信用交换公钥的步骤：
 
@@ -24,9 +24,9 @@
 
 至此我们一共有三个秘钥文件，分别是：
 
-- app_private_key.pem App私钥
+- app_private_key.pem 应用私钥
 - zmxy_public_key.pem 芝麻信用公钥
-- app_public_key.pem App公钥(仅用于调试)
+- app_public_key.pem 应用公钥(仅用于调试)
 
 ### 3. 使用SDK
 
@@ -127,7 +127,7 @@ const { url } = zmxyClient.getAuthorizeUrl({
 
 #### 获得OpenId
 
-获得授权URL后， 可以在浏览器中打开此URL，根据提示授权后会被重定向到芝麻App的回调地址， 地址Query中的`params`参数会携带OpenId， 可以通过如下方式获得
+获得授权URL后， 可以在浏览器中打开此URL，根据提示授权后会被重定向到芝麻应用的回调地址， 地址Query中的`params`参数会携带OpenId， 可以通过如下方式获得
 
 ``` js
 const { open_id } = zmxyClient.getOpenId(params);
