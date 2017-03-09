@@ -113,6 +113,56 @@ export default class ZmxyClient {
   }
 
   /**
+   * 芝麻认证初始化
+   * @refer https://b.zmxy.com.cn/technology/openDoc.htm?id=601
+   * @param realName
+   * @param idCard
+   * @returns {{params, request, response, result}|*}
+   */
+  async certificationInit(realName, idCard) {
+    return await this.request('zhima.customer.certification.initialize', {
+      transaction_id: this.randomFunc(32),
+      product_code: 'w1010100000000002978',
+      biz_code: 'FACE',
+      identity_param: JSON.stringify({
+        identity_type: "CERT_INFO",
+        cert_type: "IDENTITY_CARD",
+        cert_name: realName,
+        cert_no: idCard
+      })
+    });
+  }
+
+  /**
+   * 获取芝麻认证url
+   * @param bizNo
+   * @param return_url
+   * @returns {Promise.<void>}
+   */
+  async getCertificationCertifyUrl(bizNo, return_url) {
+    const paramsString = this.paramsToString({
+      biz_no: bizNo,
+      return_url
+    });
+
+    const sign = this.sign(paramsString);
+
+    const urlQueryString = this.paramsToString(
+      Object.assign({ method: 'zhima.customer.certification.certify', sign }, this.options)
+    );
+
+    const encryptParams = this.encrypt(paramsString);
+
+    return `${this.url}?${urlQueryString}&params=${encodeURIComponent(encryptParams)}`;
+  }
+
+  async queryCertification(bizNo) {
+    return await this.request('zhima.customer.certification.query', {
+      biz_no: bizNo
+    });
+  }
+
+  /**
    * 获取鉴权URL
    * @refer https://b.zmxy.com.cn/technology/openDoc.htm?id=67
    * @param name
@@ -128,12 +178,12 @@ export default class ZmxyClient {
     state
   }, _authBy = 'pc') {
     const identityParam = certNo ? {
-      name,
-      certNo,
-      certType: 'IDENTITY_CARD'
-    } : {
-      mobileNo: mobile
-    };
+        name,
+        certNo,
+        certType: 'IDENTITY_CARD'
+      } : {
+        mobileNo: mobile
+      };
     const identityType = certNo ? '2' : '1';
 
     //Auth code 由用户终端(PC端或移动端)以及验证方式(验证身份证或手机号)共同决定
