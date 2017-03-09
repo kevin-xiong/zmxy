@@ -156,6 +156,11 @@ export default class ZmxyClient {
     return `${this.url}?${urlQueryString}&params=${encodeURIComponent(encryptParams)}`;
   }
 
+  /**
+   * 查询芝麻认证结果
+   * @param bizNo
+   * @returns {Promise.<{params: *, request, response: *, result: *}>}
+   */
   async queryCertification(bizNo) {
     return await this.request('zhima.customer.certification.query', {
       biz_no: bizNo
