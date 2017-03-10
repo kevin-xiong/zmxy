@@ -119,7 +119,7 @@ export default class ZmxyClient {
    * @param idCard
    * @returns {{params, request, response, result}|*}
    */
-  async certificationInit(realName, idCard) {
+  async initCertification(realName, idCard) {
     return await this.request('zhima.customer.certification.initialize', {
       transaction_id: this.randomFunc(32),
       product_code: 'w1010100000000002978',
@@ -136,13 +136,13 @@ export default class ZmxyClient {
   /**
    * 获取芝麻认证url
    * @param bizNo
-   * @param return_url
+   * @param returnUrl
    * @returns {Promise.<void>}
    */
-  async getCertificationCertifyUrl(bizNo, return_url) {
+  async getCertificationCertifyUrl(bizNo, returnUrl) {
     const paramsString = this.paramsToString({
       biz_no: bizNo,
-      return_url
+      return_url: returnUrl
     });
 
     const sign = this.sign(paramsString);

@@ -163,7 +163,7 @@ test('Certification init', async(t) => {
       biz_response_sign: 'VYXaDK2PVyZDzWuy/v9VjuXeg5A1ZW82nzFV9+vdmRzcq7AyO2J6Sd9Hb34SVGveSHz03GE1q0bjD6Yq5agVFYC46xkWjUHXowWRDm4lrnNrcQ4st3XvhHmbdhklU8SvXnqHUKqScFF2zTTS6OnsbmpsjyCo9zxK3L9/ubZtcWI=',
       biz_response: 'Dcn58PDfq98T5zPa5z2RToAxQY6tqz52/jKEmdFApQafmuvO8VqgELhCwaclPb7PtPeFS64kDMKOYvmeYFzpS05tDcoUiVX07fua8vW+5BcdwSVelbohOVZRxsQvt8nhUushAfFGiBnZZcJi0cq/FX4kHN2gMF5hw253YZAY8nc='
     });
-  const res = await zmxyClient.certificationInit('张三', '310105912123123412');
+  const res = await zmxyClient.initCertification('张三', '310105912123123412');
   t.is(res.result.biz_no, 'ZM201703093000000727200705771480');
 });
 
