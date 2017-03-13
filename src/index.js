@@ -74,7 +74,7 @@ export default class ZmxyClient {
    * @returns {{params, request, response, result}|*}
    */
   async verifyIvs(params) {
-    return await this.request('zhima.credit.ivs.detail.get',
+    return this.request('zhima.credit.ivs.detail.get',
       Object.assign({
         product_code: 'w1010100000000000103',
         transaction_id: this.randomFunc(32)
@@ -90,7 +90,7 @@ export default class ZmxyClient {
    * @returns {{params, request, response, result}|*}
    */
   async verifyWatchlist(openId, transactionId) {
-    return await this.request('zhima.credit.watchlist.get', {
+    return this.request('zhima.credit.watchlist.get', {
       product_code: 'w1010100100000000022',
       transaction_id: transactionId || this.randomFunc(32),
       open_id: openId
@@ -105,7 +105,7 @@ export default class ZmxyClient {
    * @returns {{params, request, response, result}|*}
    */
   async getCreditScore(openId, transactionId) {
-    return await this.request('zhima.credit.score.get', {
+    return this.request('zhima.credit.score.get', {
       product_code: 'w1010100100000000001',
       transaction_id: transactionId || this.randomFunc(32),
       open_id: openId
@@ -127,13 +127,14 @@ export default class ZmxyClient {
     certNo,
     state
   }, _authBy = 'pc') {
-    const identityParam = certNo ? {
-      name,
-      certNo,
-      certType: 'IDENTITY_CARD'
-    } : {
-      mobileNo: mobile
-    };
+    const identityParam = certNo
+      ? {
+        name,
+        certNo,
+        certType: 'IDENTITY_CARD'
+      } : {
+        mobileNo: mobile
+      };
     const identityType = certNo ? '2' : '1';
 
     //Auth code 由用户终端(PC端或移动端)以及验证方式(验证身份证或手机号)共同决定
@@ -250,7 +251,7 @@ export default class ZmxyClient {
    * @returns {string}
    */
   paramsToString(params) {
-    const sortedParams = Object.keys(params).sort().reduce((r, k) => (r[k] = params[k], r), {});
+    const sortedParams = Object.keys(params).sort().reduce((r, k) => (r[k] = params[k], r), {}); //eslint-disable-line
     return Object.entries(sortedParams)
       .filter(([, value]) => ![null, ''].includes(value))
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
@@ -299,16 +300,16 @@ export default class ZmxyClient {
     };
     const response = await this.client(requestParams);
     const {
-      request,
+      req,
       body
     } = response;
     const {
       encrypted,
-      biz_response:result
+      biz_response: result
     } = body;
     return {
       params,
-      request,
+      request: req,
       response,
       result: encrypted ? JSON.parse(this.decrypt(result)) : result
     };
