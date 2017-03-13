@@ -366,7 +366,7 @@ export default class ZmxyClient {
       params,
       request: req,
       response,
-      result: encrypted ? JSON.parse(this.decrypt(result)) : result
+      result: encrypted ? JSON.parse(this.decrypt(result)) : JSON.parse(result)
     };
   }
 }
