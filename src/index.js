@@ -113,6 +113,61 @@ export default class ZmxyClient {
   }
 
   /**
+   * 芝麻认证初始化
+   * @refer https://b.zmxy.com.cn/technology/openDoc.htm?id=601
+   * @param realName
+   * @param idCard
+   * @returns {{params, request, response, result}|*}
+   */
+  async initCertification(realName, idCard) {
+    return this.request('zhima.customer.certification.initialize', {
+      transaction_id: this.randomFunc(32),
+      product_code: 'w1010100000000002978',
+      biz_code: 'FACE',
+      identity_param: JSON.stringify({
+        identity_type: 'CERT_INFO',
+        cert_type: 'IDENTITY_CARD',
+        cert_name: realName,
+        cert_no: idCard
+      })
+    });
+  }
+
+  /**
+   * 获取芝麻认证url
+   * @param bizNo
+   * @param returnUrl
+   * @returns {Promise.<void>}
+   */
+  async getCertificationCertifyUrl(bizNo, returnUrl) {
+    const paramsString = this.paramsToString({
+      biz_no: bizNo,
+      return_url: returnUrl
+    });
+
+    const sign = this.sign(paramsString);
+
+    const urlQueryString = this.paramsToString(
+      Object.assign({ method: 'zhima.customer.certification.certify', sign }, this.options)
+    );
+
+    const encryptParams = this.encrypt(paramsString);
+
+    return `${this.url}?${urlQueryString}&params=${encodeURIComponent(encryptParams)}`;
+  }
+
+  /**
+   * 查询芝麻认证结果
+   * @param bizNo
+   * @returns {Promise.<{params: *, request, response: *, result: *}>}
+   */
+  async queryCertification(bizNo) {
+    return this.request('zhima.customer.certification.query', {
+      biz_no: bizNo
+    });
+  }
+
+  /**
    * 获取鉴权URL
    * @refer https://b.zmxy.com.cn/technology/openDoc.htm?id=67
    * @param name
