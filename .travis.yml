@@ -3,8 +3,7 @@ node_js:
    - 6.10.0
    - 7.7.2
 script:
-#    - "npm run lint"
-    - "npm test"
+    - "npm run ava"
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 deploy:
