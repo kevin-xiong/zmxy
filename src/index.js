@@ -1,5 +1,5 @@
 import querystring from 'querystring';
-import request from 'request-promise';
+import request from 'request-promise-native';
 import crypto from 'crypto';
 
 const constants = parseInt(process.versions.node, 10) <= 4 ? require('constants') : crypto.constants;
@@ -300,7 +300,7 @@ export default class ZmxyClient {
     };
     const response = await this.client(requestParams);
     const {
-      req,
+      request: req,
       body
     } = response;
     const {

@@ -17,7 +17,7 @@
     "build": "babel -d lib/ src/"
   },
   "engines": {
-    "node": ">=4.4.5"
+    "node": ">=6.0.0"
   },
   "keywords": [
     "zmxy",
@@ -64,7 +64,7 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "request": "^2.81.0",
-    "request-promise": "^4.1.1"
+    "request-promise-native": "^1.0.3"
   },
   "devDependencies": {
     "ava": "^0.18.2",
