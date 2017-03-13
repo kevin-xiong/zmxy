@@ -110,6 +110,22 @@ test('Verify IVS', async(t) => {
   t.is(result.ivs_score, 89);
 });
 
+test('Verify IVS Error', async(t) => {
+  nock('https://zmopenapi.zmxy.com.cn')
+    .post('/openapi.do')
+    .query(() => true)
+    .reply(200, {
+      encrypted: false,
+      biz_response: '{"success":false,"error_code":"ZMCREDIT.required_parameters_not_enough","error_message":"所需参数不够"}'
+    });
+  const { result } = await zmxyClient.verifyIvs({
+    name: '',
+    mobile: '12345678901'
+  });
+
+  t.is(result.success, false);
+});
+
 test('Verify watchlist', async(t) => {
   nock('https://zmopenapi.zmxy.com.cn')
     .post('/openapi.do')
