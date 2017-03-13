@@ -1,6 +1,6 @@
 {
   "name": "zmxy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Zhima credit unofficial SDK",
   "license": "MIT",
   "repository": {
@@ -68,8 +68,8 @@
   },
   "devDependencies": {
     "ava": "^0.18.2",
-    "babel-cli": "^6.23.0",
-    "babel-core": "^6.23.1",
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
     "babel-eslint": "^7.1.1",
     "babel-plugin-__coverage__": "^11.0.0",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
