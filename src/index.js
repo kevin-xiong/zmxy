@@ -137,9 +137,9 @@ export default class ZmxyClient {
    * 获取芝麻认证url
    * @param bizNo
    * @param returnUrl
-   * @returns {Promise.<void>}
+   * @returns {string}
    */
-  async getCertificationCertifyUrl(bizNo, returnUrl) {
+  getCertificationCertifyUrl(bizNo, returnUrl) {
     const paramsString = this.paramsToString({
       biz_no: bizNo,
       return_url: returnUrl
