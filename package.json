@@ -13,7 +13,7 @@
     "prepublish": "rm -rf ./lib && npm run build",
     "ava": "LOG_LEVEL=error NODE_ENV=test node ./node_modules/.bin/ava --verbose --serial",
     "test": "nyc -a --reporter=lcov --reporter=text --reporter=html npm run ava",
-    "lint": "./node_modules/.bin/eslint src/",
+    "lint": "eslint src/* --ext .js",
     "build": "babel -d lib/ src/"
   },
   "engines": {
