@@ -217,56 +217,56 @@ test('Verify watchlist', async(t) => {
   t.is(query.method, 'zhima.credit.watchlistii.get');
 });
 
-// test('Get score', async(t) => {
-//   nock('https://zmopenapi.zmxy.com.cn')
-//     .post('/openapi.do')
-//     .query(() => true)
-//     .reply(200, {
-//       encrypted: true,
-//       sign: {
-//         signSource: 'zhima_sign_value',
-//         signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
-//       },
-//       biz_response_sign: 'NtjFCeugTs93kx1XsRWW93vQzofkhXwIPDVRNe3hHbG3bQVltttBWWGrAS8gkxn/ncsw5TRSWn5DZFb4xV6P4m1nDX1JKU2ac2M2Xt01ZkATcMkZ2oktTobhS292sP7l2O5QvK+amzUZY6IA2ZshKI2N1B1Y1astxBodWXklUV0=',
-//       biz_response: 'YswXpDhZwOiLMjh4OrMgvyiM0eScLLVtjVf3EwRUEjdXW3fscGIYe6KI4ErwcLMAcSYumrUfwSYUTXSjXXW1EYODkt/Wcu9i1rXq7LbliArtvNTphWtF7kef597J1YxwG2J9JXWCrdOMvmc6+hRd+ebMqC27OySsusVz4w/C3rc='
-//     });
-//   const { params, request, result: { zm_score } } = await zmxyClient.getCreditScore('some open id');
-//   const query = querystring.parse(request.uri.query);
-//   t.truthy(zm_score);
-//   t.is(params.product_code, 'w1010100100000000001');
-//   t.is(query.method, 'zhima.credit.score.get');
-// });
-//
-// test('Certification init', async(t) => {
-//   nock('https://zmopenapi.zmxy.com.cn')
-//     .post('/openapi.do')
-//     .query(() => true)
-//     .reply(200, {
-//       encrypted: true,
-//       sign: {
-//         signSource: 'zhima_sign_value',
-//         signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
-//       },
-//       biz_response_sign: 'VYXaDK2PVyZDzWuy/v9VjuXeg5A1ZW82nzFV9+vdmRzcq7AyO2J6Sd9Hb34SVGveSHz03GE1q0bjD6Yq5agVFYC46xkWjUHXowWRDm4lrnNrcQ4st3XvhHmbdhklU8SvXnqHUKqScFF2zTTS6OnsbmpsjyCo9zxK3L9/ubZtcWI=',
-//       biz_response: 'Dcn58PDfq98T5zPa5z2RToAxQY6tqz52/jKEmdFApQafmuvO8VqgELhCwaclPb7PtPeFS64kDMKOYvmeYFzpS05tDcoUiVX07fua8vW+5BcdwSVelbohOVZRxsQvt8nhUushAfFGiBnZZcJi0cq/FX4kHN2gMF5hw253YZAY8nc='
-//     });
-//   const res = await zmxyClient.initCertification('张三', '310105912123123412');
-//   t.is(res.result.biz_no, 'ZM201703093000000727200705771480');
-// });
-//
-// test('Certification Query', async(t) => {
-//   nock('https://zmopenapi.zmxy.com.cn')
-//     .post('/openapi.do')
-//     .query(() => true)
-//     .reply(200, {
-//       encrypted: true,
-//       sign: {
-//         signSource: 'zhima_sign_value',
-//         signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
-//       },
-//       biz_response_sign: 'SP+K6ZpqsWyIY2mEFVFJlpOgl+JujaVEYB/VwO+JiUVwIe1WUhZaJpHmLpJFYFC645+Uz+IfwJoTGEr0OD8+O/B/NZbE0DZ1O07B6hvGKjm5+clMP00EZqOzanC3oUEmsAb7agBxnlZuq/4OVLztUG9Oz+aYqZJVDmcZQDXFLVY=',
-//       biz_response: 'RQ30EQ7I4tJJAT7AG1Xh0XDqYUBNVMgtFz62sYBKJOtrE5cgEBO1yYPaHUSLWo3Kycl7OFpXGibTKIXLbHuo9F92+aQjzHACYUDg3vK5BY7yYfiuaIPGPZ6EXkdDicPO0nEYKsU9fNXYa7ZKb/MdUFytbHQI81CDfoBkJUnx+XY='
-//     });
-//   const res = await zmxyClient.queryCertification('ZM201703093000000111100703563174');
-//   t.is(res.result.passed, "true");
-// });
+test('Get score', async(t) => {
+  nock('https://zmopenapi.zmxy.com.cn')
+    .post('/openapi.do')
+    .query(() => true)
+    .reply(200, {
+      encrypted: true,
+      sign: {
+        signSource: 'zhima_sign_value',
+        signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
+      },
+      biz_response_sign: 'NtjFCeugTs93kx1XsRWW93vQzofkhXwIPDVRNe3hHbG3bQVltttBWWGrAS8gkxn/ncsw5TRSWn5DZFb4xV6P4m1nDX1JKU2ac2M2Xt01ZkATcMkZ2oktTobhS292sP7l2O5QvK+amzUZY6IA2ZshKI2N1B1Y1astxBodWXklUV0=',
+      biz_response: 'YswXpDhZwOiLMjh4OrMgvyiM0eScLLVtjVf3EwRUEjdXW3fscGIYe6KI4ErwcLMAcSYumrUfwSYUTXSjXXW1EYODkt/Wcu9i1rXq7LbliArtvNTphWtF7kef597J1YxwG2J9JXWCrdOMvmc6+hRd+ebMqC27OySsusVz4w/C3rc='
+    });
+  const { params, request, result: { zm_score } } = await zmxyClient.getCreditScore('some open id');
+  const query = querystring.parse(request.uri.query);
+  t.truthy(zm_score);
+  t.is(params.product_code, 'w1010100100000000001');
+  t.is(query.method, 'zhima.credit.score.get');
+});
+
+test('Certification init', async(t) => {
+  nock('https://zmopenapi.zmxy.com.cn')
+    .post('/openapi.do')
+    .query(() => true)
+    .reply(200, {
+      encrypted: true,
+      sign: {
+        signSource: 'zhima_sign_value',
+        signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
+      },
+      biz_response_sign: 'VYXaDK2PVyZDzWuy/v9VjuXeg5A1ZW82nzFV9+vdmRzcq7AyO2J6Sd9Hb34SVGveSHz03GE1q0bjD6Yq5agVFYC46xkWjUHXowWRDm4lrnNrcQ4st3XvhHmbdhklU8SvXnqHUKqScFF2zTTS6OnsbmpsjyCo9zxK3L9/ubZtcWI=',
+      biz_response: 'Dcn58PDfq98T5zPa5z2RToAxQY6tqz52/jKEmdFApQafmuvO8VqgELhCwaclPb7PtPeFS64kDMKOYvmeYFzpS05tDcoUiVX07fua8vW+5BcdwSVelbohOVZRxsQvt8nhUushAfFGiBnZZcJi0cq/FX4kHN2gMF5hw253YZAY8nc='
+    });
+  const res = await zmxyClient.initCertification('张三', '310105912123123412');
+  t.is(res.result.biz_no, 'ZM201703093000000727200705771480');
+});
+
+test('Certification Query', async(t) => {
+  nock('https://zmopenapi.zmxy.com.cn')
+    .post('/openapi.do')
+    .query(() => true)
+    .reply(200, {
+      encrypted: true,
+      sign: {
+        signSource: 'zhima_sign_value',
+        signResult: 'JBSyQcJOy5O1Y3US2LJGzUIiQwauQR24IOhLA8X6mlUyLUhgLZur9RzG61NF2to25iJCj1as7eOziTOr9E4t7s+FxZ3/h6dRA1f2cGW6wolw9VGMljmbOBvNOfO/y0JfVWH2xVxRoFPThbig8fZiQ6fnYtRYWJn6c8EVJG1AzUg='
+      },
+      biz_response_sign: 'SP+K6ZpqsWyIY2mEFVFJlpOgl+JujaVEYB/VwO+JiUVwIe1WUhZaJpHmLpJFYFC645+Uz+IfwJoTGEr0OD8+O/B/NZbE0DZ1O07B6hvGKjm5+clMP00EZqOzanC3oUEmsAb7agBxnlZuq/4OVLztUG9Oz+aYqZJVDmcZQDXFLVY=',
+      biz_response: 'RQ30EQ7I4tJJAT7AG1Xh0XDqYUBNVMgtFz62sYBKJOtrE5cgEBO1yYPaHUSLWo3Kycl7OFpXGibTKIXLbHuo9F92+aQjzHACYUDg3vK5BY7yYfiuaIPGPZ6EXkdDicPO0nEYKsU9fNXYa7ZKb/MdUFytbHQI81CDfoBkJUnx+XY='
+    });
+  const res = await zmxyClient.queryCertification('ZM201703093000000111100703563174');
+  t.is(res.result.passed, "true");
+});

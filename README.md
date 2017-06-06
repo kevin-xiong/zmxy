@@ -77,9 +77,9 @@ zmxy.verifyIvs({
 ``` js
 zmxy.getIvsScore({
   name: '张三',
-  mobile: '12345678901'
+  cert_no: '532926200804058748'
 }).then(({ result }) => {
-  console.log(result);
+  console.log(result.score); //output is risk score such as 89
 });
 ```
 
@@ -89,9 +89,21 @@ zmxy.getIvsScore({
 ``` js
 zmxy.verifyIvs({
   name: '张三',
-  mobile: '12345678901'
+  cert_no: '532926200804058748'
 }).then(({ result }) => {
-  console.log(result);
+  console.log(result.verify_code); //output is an Array contains risk codes such as ['V_CN_NA', 'V_PH_NA']
+});
+```
+
+
+### 欺诈关注名单
+
+``` js
+zmxy.getIvsWatchList({
+  name: '张三',
+  cert_no: '532926200804058748'
+}).then(({ result }) => {
+  console.log(result.riskCode); //output is an Array contains risk codes such as ['R_CN_002']
 });
 ```
 
@@ -164,6 +176,35 @@ zmxyClient.verifyWatchlist('openid').then((r) => {
   console.log(r.result.is_matched)
 });
 ```
+
+### 芝麻认证
+
+流程与[芝麻认证文档](https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=CERTIFICATION_QUICK_START)一致
+
+**1. 初始化并生成`biz_no`**
+
+
+``` js
+let bizNo = null;
+zmxyClient.initCertification('张三', '310105912123123412').then((r) => {
+  bizNo = r.result.biz_no; //output is as ZM201703093000000727200705771480
+});
+```
+
+**2. 通过`biz_no`生成芝麻认证URL**
+
+```
+const url = zmxyClient.getCertificationCertifyUrl(bizNo, 'http://localhost');
+```
+
+**3. 设备访问芝麻认证URL，再使用`bizNo`查询芝麻认证结果**
+
+
+``` js
+zmxyClient.queryCertification(bizNo).then((r) => {
+  console.log(r.result.passed); //output is true or false
+});
+
 
 ## 开启调试
 
