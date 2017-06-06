@@ -204,7 +204,7 @@ const url = zmxyClient.getCertificationCertifyUrl(bizNo, 'http://localhost');
 zmxyClient.queryCertification(bizNo).then((r) => {
   console.log(r.result.passed); //output is true or false
 });
-
+```
 
 ## 开启调试
 
