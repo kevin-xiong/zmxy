@@ -72,6 +72,18 @@ zmxy.verifyIvs({
 
 ## SDK功能
 
+### 获得欺诈评分
+
+``` js
+zmxy.getIvsScore({
+  name: '张三',
+  mobile: '12345678901'
+}).then(({ result }) => {
+  console.log(result);
+});
+```
+
+
 ### 反欺诈信息验证
 
 ``` js

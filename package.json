@@ -1,6 +1,6 @@
 {
   "name": "zmxy",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Zhima credit unofficial SDK",
   "license": "MIT",
   "repository": {
@@ -64,25 +64,25 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "request": "^2.81.0",
-    "request-promise-native": "^1.0.3"
+    "request-promise-native": "^1.0.4"
   },
   "devDependencies": {
-    "ava": "^0.18.2",
-    "babel-cli": "^6.24.0",
-    "babel-core": "^6.24.0",
-    "babel-eslint": "^7.1.1",
+    "ava": "^0.19.1",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-eslint": "^7.2.3",
     "babel-plugin-__coverage__": "^11.0.0",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
-    "babel-plugin-transform-class-properties": "^6.23.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015-node4": "^2.1.1",
-    "babel-preset-stage-3": "^6.22.0",
-    "eslint": "^3.17.1",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.0",
-    "nock": "^9.0.9",
-    "nyc": "^10.1.2",
+    "babel-preset-stage-3": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-react": "^7.0.1",
+    "nock": "^9.0.13",
+    "nyc": "^11.0.2",
     "pre-commit": "^1.2.2"
   }
 }

@@ -67,30 +67,64 @@ export default class ZmxyClient {
     return this;
   }
 
+
   /**
-   * 反欺诈信息验证
-   * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.ivs.detail.get@1.0@1.2&relType=API_DOC&type=API_INFO_DOC&LEFT_MENU_MODEnull
+   * 获得反欺诈评分
+   * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.antifraud.score.get@1.0@1.1
    * @param params
    * @returns {{params, request, response, result}|*}
    */
-  async verifyIvs(params) {
-    return this.request('zhima.credit.ivs.detail.get',
+  async getIvsScore(params) {
+    return this.request('zhima.credit.antifraud.score.get',
       Object.assign({
-        product_code: 'w1010100000000000103',
-        transaction_id: this.randomFunc(32)
+        product_code: 'w1010100003000001100',
+        transaction_id: this.randomFunc(32),
+        cert_type: 'IDENTITY_CARD'
       }, params)
     );
   }
 
   /**
-   * 行业黑名单验证
+   * 反欺诈信息验证
+   * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.antifraud.verify@1.0@1.1
+   * @param params
+   * @returns {{params, request, response, result}|*}
+   */
+  async verifyIvs(params) {
+    return this.request('zhima.credit.antifraud.verify',
+      Object.assign({
+        product_code: 'w1010100000000002859',
+        transaction_id: this.randomFunc(32),
+        cert_type: 'IDENTITY_CARD'
+      }, params)
+    );
+  }
+
+  /**
+   * 获得反欺诈关注名单
+   * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.antifraud.risk.list@1.0@1.0
+   * @param params
+   * @returns {{params, request, response, result}|*}
+   */
+  async getIvsWatchList(params) {
+    return this.request('zhima.credit.antifraud.risk.list',
+      Object.assign({
+        product_code: 'w1010100003000001283',
+        transaction_id: this.randomFunc(32),
+        cert_type: 'IDENTITY_CARD'
+      }, params)
+    );
+  }
+
+  /**
+   * 行业关注名单验证
    * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=zhima.credit.watchlistii.get@1.0@1.0&relType=API_DOC&type=API_INFO_DOC&LEFT_MENU_MODE=null
    * @param openId
    * @param transactionId
    * @returns {{params, request, response, result}|*}
    */
   async verifyWatchlist(openId, transactionId) {
-    return this.request('zhima.credit.watchlist.get', {
+    return this.request('zhima.credit.watchlistii.get', {
       product_code: 'w1010100100000000022',
       transaction_id: transactionId || this.randomFunc(32),
       open_id: openId
