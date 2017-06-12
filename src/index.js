@@ -67,6 +67,31 @@ export default class ZmxyClient {
     return this;
   }
 
+  /**
+   * 数据反馈
+   * @refer https://b.zmxy.com.cn/technology/openDoc.htm?relInfo=FEEDBACK_DOC
+   * @param typeId
+   * @param records
+   * @returns {Promise.<{params: *, request, response: *, result: *}>}
+   */
+  async batchFeedback(typeId, records) {
+    return this.request('zhima.data.batch.feedback', {
+      file_type: 'json_data',
+      file_charset: 'UTF-8',
+      records: records.length,
+      columns: 'user_name,user_credentials_type,user_credentials_no,order_no,biz_type,order_status,create_amt,pay_month,gmt_ovd_date,overdue_days,overdue_amt,gmt_pay,memo',
+      primary_key_columns: 'order_no,pay_month',
+      type_id: typeId,
+      files: {
+        file: {
+          value: JSON.stringify({ records }),
+          options: {
+            filename: 'records.json'
+          }
+        }
+      }
+    });
+  }
 
   /**
    * 获得反欺诈评分
@@ -377,16 +402,27 @@ export default class ZmxyClient {
   async request(service, params) {
     const paramsString = this.paramsToString(params);
     const sign = this.sign(paramsString);
+    const files = params.files;
     const requestParams = {
       method: 'POST',
       url: this.url,
       qs: Object.assign({ method: service, sign }, this.options),
-      form: {
-        params: this.encrypt(paramsString)
-      },
       json: true,
       resolveWithFullResponse: true
     };
+    if (files) {
+      requestParams.formData = {
+        params: this.encrypt(paramsString)
+      };
+      Object.keys(files).forEach((key) => {
+        requestParams.formData[key] = files[key];
+      });
+    } else {
+      requestParams.form = {
+        params: this.encrypt(paramsString)
+      };
+    }
+
     const response = await this.client(requestParams);
     const {
       request: req,
@@ -396,6 +432,7 @@ export default class ZmxyClient {
       encrypted,
       biz_response: result
     } = body;
+
     return {
       params,
       request: req,

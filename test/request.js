@@ -6,16 +6,24 @@ import nock from 'nock';
 import ZmxyClient from '../src/index';
 
 let zmxyClient = {};
+let zmxyClient2 = {};
 test.before(() => {
   zmxyClient = new ZmxyClient({
     platform: 'bmqb',
     appId: '1000980',
-    appPrivateKey: fs.readFileSync(`${__dirname}/_keys/app_private_key.pem`),
-    zmxyPublicKey: fs.readFileSync(`${__dirname}/_keys/zmxy_public_key.pem`)
+    appPrivateKey: fs.readFileSync(`${__dirname}/_keys1/app_private_key.pem`),
+    zmxyPublicKey: fs.readFileSync(`${__dirname}/_keys1/zmxy_public_key.pem`)
+  });
+
+  zmxyClient2 = new ZmxyClient({
+    platform: 'dev',
+    appId: '1003150',
+    appPrivateKey: fs.readFileSync(`${__dirname}/_keys2/app_private_key.pem`),
+    zmxyPublicKey: fs.readFileSync(`${__dirname}/_keys2/zmxy_public_key.pem`)
   });
 });
 
-test('Get auth url by mobile during pc', async (t) => {
+test('Get auth url by mobile during pc', async(t) => {
   const { url, identity_type, identity_param: { mobileNo }, biz_params: { auth_code } } = zmxyClient.getAuthorizeUrl({
     mobile: '12345678901'
   });
@@ -35,7 +43,7 @@ test('Get auth url by mobile during pc', async (t) => {
   t.is(qs.method, 'zhima.auth.info.authorize');
 });
 
-test('Get auth url by mobile during h5', async (t) => {
+test('Get auth url by mobile during h5', async(t) => {
   const { identity_type, identity_param: { mobileNo }, biz_params: { auth_code } } = zmxyClient.getAuthorizeUrl({
     mobile: '12345678901'
   }, 'h5');
@@ -44,7 +52,7 @@ test('Get auth url by mobile during h5', async (t) => {
   t.is(auth_code, 'M_H5');
 });
 
-test('Get auth url by name during pc', async (t) => {
+test('Get auth url by name during pc', async(t) => {
   const { identity_type, identity_param: { name, certNo, certType }, biz_params: { auth_code } } = zmxyClient.getAuthorizeUrl({
     name: '张三',
     certNo: '111111111111111111'
@@ -56,7 +64,7 @@ test('Get auth url by name during pc', async (t) => {
   t.is(auth_code, 'M_APPPC_CERT');
 });
 
-test('Get auth url by name during h5', async (t) => {
+test('Get auth url by name during h5', async(t) => {
   const { identity_type, identity_param: { name, certNo, certType }, biz_params: { auth_code } } = zmxyClient.getAuthorizeUrl({
     name: '张三',
     certNo: '111111111111111111'
@@ -68,7 +76,7 @@ test('Get auth url by name during h5', async (t) => {
   t.is(auth_code, 'M_H5');
 });
 
-test('Get open id', async (t) => {
+test('Get open id', async(t) => {
   const { open_id } = zmxyClient.getOpenId(
     'WRK8lfrvYpCLG/f36NZjtkpj7epnIEJWKkKXFR/gl17a0lnvqraAVT0NaT0A0t8BQZLYtRTamzX4K4VFXTsq2qXx7Wppo2wDQObQjsKv7BAPbIjj4+fuP0W6L7qKnmx3nZtBPBPqcFAwrVEyWgCtNDtkrcirKPI19h6rJCnzhzHUIWCBqvk1kuJcOViwHyWOz6s78PiX6odZ5rPPBLIXahyixU95SnvMlUCyLXICclE80nuzkFscs1maHFcG5Rkj35cKkW0m0rbLVsPQKksfvjbvQRMGiqylinaqWcdbeCKPB+TjofN+kglwdtlI9mFNybNN4/Su3BwryKQOOSBTXw=='
   );
@@ -76,7 +84,7 @@ test('Get open id', async (t) => {
 });
 
 
-test('Verify IVS', async (t) => {
+test('Verify IVS', async(t) => {
   nock('https://zmopenapi.zmxy.com.cn')
     .post('/openapi.do')
     .query(() => true)
@@ -94,7 +102,7 @@ test('Verify IVS', async (t) => {
     cert_no: '532926200804058748',
     mobile: '17348890449'
   });
-  const publicKey = fs.readFileSync(`${__dirname}/_keys/app_public_key.pem`);
+  const publicKey = fs.readFileSync(`${__dirname}/_keys1/app_public_key.pem`);
   const query = querystring.parse(request.uri.query);
   t.is(request.method, 'POST');
   t.is(params.product_code, 'w1010100000000002859');
@@ -110,7 +118,7 @@ test('Verify IVS', async (t) => {
   t.deepEqual(result.verify_code, ['V_CN_NA', 'V_PH_NA']);
 });
 
-test('IVS score', async (t) => {
+test('IVS score', async(t) => {
   nock('https://zmopenapi.zmxy.com.cn')
     .post('/openapi.do')
     .query(() => true)
@@ -128,7 +136,7 @@ test('IVS score', async (t) => {
     cert_no: '532926200804058748',
     mobile: '17348890449'
   });
-  const publicKey = fs.readFileSync(`${__dirname}/_keys/app_public_key.pem`);
+  const publicKey = fs.readFileSync(`${__dirname}/_keys1/app_public_key.pem`);
   const query = querystring.parse(request.uri.query);
   t.is(request.method, 'POST');
   t.is(params.product_code, 'w1010100003000001100');
@@ -145,7 +153,7 @@ test('IVS score', async (t) => {
 });
 
 
-test.skip('IVS watchlist', async (t) => {
+test.skip('IVS watchlist', async(t) => {
   nock.restore();
   nock('https://zmopenapi.zmxy.com.cn')
     .post('/openapi.do')
@@ -164,7 +172,7 @@ test.skip('IVS watchlist', async (t) => {
     cert_no: '532926200804058748',
     mobile: '17348890449'
   });
-  const publicKey = fs.readFileSync(`${__dirname}/_keys/app_public_key.pem`);
+  const publicKey = fs.readFileSync(`${__dirname}/_keys1/app_public_key.pem`);
   const query = querystring.parse(request.uri.query);
   t.is(request.method, 'POST');
   t.is(params.product_code, 'w1010100003000001100');
@@ -269,4 +277,37 @@ test('Certification Query', async(t) => {
     });
   const res = await zmxyClient.queryCertification('ZM201703093000000111100703563174');
   t.is(res.result.passed, "true");
+});
+
+test('Batch Feedback', async(t) => {
+  nock('https://zmopenapi.zmxy.com.cn')
+    .post('/openapi.do')
+    .query(() => true)
+    .reply(200, {
+      encrypted: true,
+      sign: {
+        signSource: 'zhima_sign_value',
+        signResult: 'aa2UQZuxpbTjKmJKfMk/gKyg164CBSX3qNjlSx6jzuBP4Qwj6mns5UoX6WAXvHOt8yNLSc/WGmFMOM9kE8I+Srx9OW1a8FBnVn//Lur+OikSKwbiveBDaf3WuwzJWaDif2xUYBq9RU8KM/n+kry6zJaTwchsX7cCukA9CqV/Vmg='
+      },
+      biz_response_sign: 'UXYyG6hQaTrKJ11xHGvhnEhJZG1XxY5hg0TZ+nk6RsH0C2qWmJvxLtBMVlEyfuhEAAurWfHpeAFtiApu0ghglY4iT/ZACpGgNL7nS7g+Eh8RISo0aARukEvz4r2y1mQ5153U9wnHq9I0Irj4snwv3z+/ZlIQozD6Gf4ToUqA1iM=',
+      biz_response: 'YgFQsK+m/Sc2fD+lYjeFAN4pR5XiyNXYFA41qMsvgGZdEpBOyBI0gS4WKwvtyn9pBLoPwH7mH8vU8asxCebadE1qDYFw2TxAykVVysUSTKFA7qOvOuemkDccJozXenXA4tmn9IWuk1Ltk9088RCToxF4DWwCRfwkEAm61o9iFOQ='
+    });
+  const res = await zmxyClient2.batchFeedback('1002215-default-test', JSON.parse(`[
+    {
+      "user_name": "张三",
+      "user_credentials_type": "0",
+      "user_credentials_no": "33092219890726331X",
+      "order_no": "30032015073000055125",
+      "biz_type": "1",
+      "order_status": "01",
+      "create_amt": "19000.00",
+      "pay_month": "7",
+      "gmt_ovd_date": "2015-05-01 00:00:00",
+      "overdue_days": "3",
+      "overdue_amt": "1800.79",
+      "gmt_pay": "",
+      "memo": ""
+    }
+  ]`));
+  t.is(res.result.biz_success, 'success')
 });

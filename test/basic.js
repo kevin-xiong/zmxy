@@ -7,8 +7,8 @@ test.before(() => {
   zmxyClient = new ZmxyClient({
     platform: 'bmqb',
     appId: '123456',
-    appPrivateKey: fs.readFileSync(`${__dirname}/_keys/app_private_key.pem`),
-    zmxyPublicKey:  fs.readFileSync(`${__dirname}/_keys/app_public_key.pem`)
+    appPrivateKey: fs.readFileSync(`${__dirname}/_keys1/app_private_key.pem`),
+    zmxyPublicKey:  fs.readFileSync(`${__dirname}/_keys1/app_public_key.pem`)
   });
 });
 
