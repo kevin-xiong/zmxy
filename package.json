@@ -1,6 +1,6 @@
 {
   "name": "zmxy",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Zhima credit unofficial SDK",
   "license": "MIT",
   "repository": {
@@ -11,7 +11,7 @@
     "pretest": "npm run build",
     "prestart": "npm run build",
     "prepublish": "rm -rf ./lib && npm run build",
-    "ava": "LOG_LEVEL=error NODE_ENV=test node ./node_modules/.bin/ava --verbose --serial",
+    "ava": "LOG_LEVEL=error NODE_ENV=test ava --verbose --serial",
     "test": "nyc -a --reporter=lcov --reporter=text --reporter=html npm run ava",
     "lint": "eslint src/* --ext .js",
     "build": "babel -d lib/ src/"
@@ -74,7 +74,7 @@
     "babel-plugin-__coverage__": "^11.0.0",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-es2015-node4": "^2.1.1",
+    "babel-preset-es2015-node6": "^0.4.0",
     "babel-preset-stage-3": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
