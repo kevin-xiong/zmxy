@@ -1,15 +1,15 @@
 language: node_js
 node_js:
-- 6.10.3
-- 8.0.0
+- 6.11.0
+- 8.1.1
 script:
-- npm run ava
+- npm test
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: npm
   email: allo.vince@gmail.com
   api_key:
-    secure: lamZ8IkCac75WHrbmA/WfpGa3xDMTPYDYh1kueFofQenU55w1qHq4AgjtYvYCgjSNwfGQJOaVqnikIh46nD9WTMQUh5UdlLkvI2PSYO+kXwr3VGmDzu+yHG3gwIR03eNgRyRGHKx+6AsUh3iQBp0RYXFx/LM3aHKhL53/PinOIaMzEq0JONPCHIjJOiIaz7k1hyYW7gkAnQam2iq5/jGAN5/czYfq4GgvDf0tu4ItLAEf/myxvJkCAOlpnzpAdB70R9x5HoRUuNrB05twkGyufGL1cdvvXTFeQ5PoAiJ6qh0Rzbs5igGsfxTw/aAPTyL8MbflcBPok5sN705OgeLMz3R0BCg7r0AIf1n6iSYygWw9ZPxTaFKx/QkQgUaDW0vXkuPCqOhIlM5u8rkDGtutigL2BxUZTFO1BZIMOluz1asrR3xoQUG7NjHf4EtCuL0vlloK4/MgrE1vdHoqm8KoZeu/+jIE2OcUZW2BNMm7W1WphVpJYfg9JvDRX3SZ7ziJ86747JBS3EbBFej7PvITQhWqS+iV9+MmOpQ0uNvm9ZSRgM5/cPl2gQvzF/I3q1/8UoD9/f3MokGtChnBb2t0qPXX+zr+bDkd77ZtIXTjN7muYIQl455wiwhCoU1EDN8kthohmxcsvJ4gxQwVuZnw5GD54GaRtQztsYMCVuA7CM=
+    secure: OmirvH0hX+F3NAGhq9CO9J/2vDDTX6BBqD0KHyGh5mWBNcd7qZRL/zdBJYdE88K5rt9w0bAMx4Cf2LGDfj0sda/ZJqte8xi6tmWbwK7QBO5/SN0Mz3+0/7/ZlDhia+uJNAw7G9rYPWjalAmF3lMu+MNQLdI1HOSixDSAjrETED0387uRoPjZAcFLHMkrHK55xWrJInSkA1KZN3pLii7M6cxMxX++g23idDQ5FkRhjrj1lrKJPRDMF5VI20Qfr1bGllRU59k/jsOVBaouqkAhncErnfOjQYqHmRjCBoG0kSLFLmxNiKlzkFi6E3VyB9f4LKA5EPhYZE+AGmXDpY+1YpgEWUgddnof5bheYH3ns3TOX/4wHecHEYpDfjnIPq92y6op5yA2j8hCb7BR4bqK0puHYfzpwHLhK5vPhibzSSkRE6KDODJv7hlw0/9gOQnr3oD/Ir2FTP2OcDMCHDXf8KkS5MJJX+MqMH4CkqWr6Z9RmHn25GLiF7J6sgfodAjqb3lkQyu0SAmJsTmIBWeNy7HPrmNK45k2huguIaYnthXy4pu/eWxsmu0Z7n0PiRJfbvmZBkfsZZZNdHC4aUJGFwpKxA5o8O798Dy9ptjAdWonOtlK5bbyMv727il4qfT+d+5xg+FxKmYKybrZEQwyBb6D5qaN/QL6x5I9FGlrMT8=
   on:
     tags: true
