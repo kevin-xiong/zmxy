@@ -2,7 +2,7 @@ import querystring from 'querystring';
 import request from 'request-promise-native';
 import crypto from 'crypto';
 
-const constants = parseInt(process.versions.node, 10) <= 4 ? require('constants') : crypto.constants;
+const constants = parseInt(process.versions.node, 10) <= 6.3 ? require('constants') : crypto.constants;
 
 const random = (len = 16) => {
   const digits = '0123456789abcdefghijklmnopqrstuvwxyz';
